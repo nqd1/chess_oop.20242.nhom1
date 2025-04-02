@@ -1,4 +1,5 @@
-class Move {
+package Components;
+public class Move {
     public int fromRow, fromCol, toRow, toCol;
     public Move(int fromRow, int fromCol, int toRow, int toCol) {
         this.fromRow = fromRow;
@@ -6,4 +7,4 @@ class Move {
         this.toRow = toRow;
         this.toCol = toCol;
     }
-}
+} 

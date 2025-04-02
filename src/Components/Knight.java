@@ -3,8 +3,9 @@ package Components;
 import java.util.*;
 
 class Knight extends Piece {
-    public Knight(Color color, int row, int col) {
-        super(color, row, col);
+    private final static int value = 3;
+        public Knight(Color color, int row, int col) {
+            super(color, row, col, value);
     }
     public List<Move> getValidMoves(Board board) {
         List<Move> moves = new ArrayList<>();
