@@ -3,8 +3,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 class Pawn extends Piece {
-    public Pawn(Color color, int row, int col) {
-        super(color, row, col);
+    private final static int value = 1;
+        public Pawn(Color color, int row, int col) {
+            super(color, row, col, value);
     }
     public List<Move> getValidMoves(Board board) {
         List<Move> moves = new ArrayList<>();

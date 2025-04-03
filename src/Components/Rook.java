@@ -3,8 +3,10 @@ import java.util.*;
 
 
 class Rook extends Piece {
+    private final static int value = 5;
+
     public Rook(Color color, int row, int col) {
-        super(color, row, col);
+            super(color, row, col, value);
     }
     public List<Move> getValidMoves(Board board) {
         List<Move> moves = new ArrayList<>();

@@ -1,16 +1,12 @@
 package Components;
 import java.util.*;
 
-enum Color {
-    WHITE,
-    BLACK
-}
+
 
 public abstract class Piece {
-    
     protected Color color;
     protected int row, col;
-    public Piece(Color color, int row, int col) {
+    public Piece(Color color, int row, int col, int value) {
         this.color = color;
         this.row = row;
         this.col = col;

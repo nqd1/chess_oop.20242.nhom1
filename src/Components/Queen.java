@@ -2,8 +2,10 @@ package Components;
 import java.util.*;
 
 class Queen extends Piece {
+    private final static int value = 9;
+    
     public Queen(Color color, int row, int col) {
-        super(color, row, col);
+            super(color, row, col, value);
     }
     public List<Move> getValidMoves(Board board) {
         List<Move> moves = new ArrayList<>();
