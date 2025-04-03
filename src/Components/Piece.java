@@ -1,10 +1,7 @@
 package Components;
 import java.util.*;
 
-enum Color {
-    WHITE,
-    BLACK
-}
+
 
 public abstract class Piece {
     protected Color color;
