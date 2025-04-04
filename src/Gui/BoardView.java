@@ -28,9 +28,7 @@ public class BoardView extends StackPane {
         getChildren().addAll(boardImageView, highlightLayer);
     }
 
-    /**
-     * Show a list of legal move positions (row, col) as circles.
-     */
+ 
     public void showLegalMoves(List<int[]> legalMoves) {
         clearHighlights();
 
