@@ -2,7 +2,7 @@ package Components;
 
 import java.util.*;
 
-class Knight extends Piece {
+public class Knight extends Piece {
     private final static int value = 3;
         public Knight(Color color, int row, int col) {
             super(color, row, col, value);

@@ -2,7 +2,7 @@ package Components;
 import java.util.*;
 
 
-class Rook extends Piece {
+public class Rook extends Piece {
     private final static int value = 5;
 
     public Rook(Color color, int row, int col) {

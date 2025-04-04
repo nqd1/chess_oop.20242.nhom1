@@ -2,7 +2,7 @@ package Components;
 import java.util.ArrayList;
 import java.util.List;
 
-class King extends Piece {
+public class King extends Piece {
     private final static int value = 100000;
         public King(Color color, int row, int col) {
             super(color, row, col, value);

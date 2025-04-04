@@ -2,7 +2,7 @@ package Components;
 import java.util.List;
 import java.util.ArrayList;
 
-class Pawn extends Piece {
+public class Pawn extends Piece {
     private final static int value = 1;
         public Pawn(Color color, int row, int col) {
             super(color, row, col, value);

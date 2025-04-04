@@ -44,4 +44,21 @@ public class Board {
         board[0][4] = new King(Color.BLACK, 0, 4);
         board[7][4] = new King(Color.WHITE, 7, 4);
     }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = board[i][j];
+                if (piece == null) {
+                    sb.append(".\t");
+                } else {
+                    sb.append(piece.toString()).append("\t");
+                }
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }

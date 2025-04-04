@@ -1,7 +1,7 @@
 package Components;
 import java.util.*;
 
-class Bishop extends Piece {
+public class Bishop extends Piece {
     private final static int value = 3;
         public Bishop(Color color, int row, int col) {
             super(color, row, col, value);
