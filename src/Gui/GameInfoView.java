@@ -19,25 +19,20 @@ public class GameInfoView extends VBox {
         setSpacing(15);
         setPrefWidth(200);
         setStyle("-fx-background-color: #f0f0f0;");
-
-        // Move history
         moveHistoryArea = new TextArea();
         moveHistoryArea.setEditable(false);
         moveHistoryArea.setPrefHeight(200);
         moveHistoryArea.setWrapText(true);
         moveHistoryArea.setPromptText("Move History");
-
-        // Captured pieces
         capturedLabel = new Label("Captured Pieces:");
         capturedWhite = new HBox(5);
         capturedBlack = new HBox(5);
 
-        // Evaluation bar
         Label evalLabel = new Label("Evaluation:");
         evaluationBar = new Rectangle(20, 100);
         evaluationBar.setFill(Color.GRAY);
 
-        // Game status
+
         gameStatus = new Label("White to move");
 
         getChildren().addAll(
