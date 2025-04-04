@@ -1,44 +1,75 @@
 package Gui;
+
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import java.util.List;
+
 public class GameInfoView extends VBox {
-    private Label currentPlayerLabel;
-    private ListView<String> moveHistoryListView;
-    private Label capturedPiecesLabel;
-    private Label gameStatusLabel;
+    private TextArea moveHistoryArea;
+    private Label capturedLabel;
+    private HBox capturedWhite, capturedBlack;
     private Rectangle evaluationBar;
+    private Label gameStatus;
+
     public GameInfoView() {
         setPadding(new Insets(10));
-        setSpacing(10);
-        currentPlayerLabel = new Label("Current Player: White");
-        moveHistoryListView = new ListView<>();
-        capturedPiecesLabel = new Label("Captured Pieces: None");
-        gameStatusLabel = new Label("Game Status: In Progress");
-        evaluationBar = new Rectangle(20, 200, Color.GRAY);
-        getChildren().addAll(currentPlayerLabel, moveHistoryListView, capturedPiecesLabel, evaluationBar, gameStatusLabel);
-    }
-    public void updateCurrentPlayer(String player) {
-        currentPlayerLabel.setText("Current Player: " + player);
-    }
-    public void updateMoveHistory(List<String> moves) {
-        moveHistoryListView.getItems().setAll(moves);
-    }
-    public void updateCapturedPieces(String pieces) {
-        capturedPiecesLabel.setText("Captured Pieces: " + pieces);
+        setSpacing(15);
+        setPrefWidth(200);
+        setStyle("-fx-background-color: #f0f0f0;");
+
+        // Move history
+        moveHistoryArea = new TextArea();
+        moveHistoryArea.setEditable(false);
+        moveHistoryArea.setPrefHeight(200);
+        moveHistoryArea.setWrapText(true);
+        moveHistoryArea.setPromptText("Move History");
+
+        // Captured pieces
+        capturedLabel = new Label("Captured Pieces:");
+        capturedWhite = new HBox(5);
+        capturedBlack = new HBox(5);
+
+        // Evaluation bar
+        Label evalLabel = new Label("Evaluation:");
+        evaluationBar = new Rectangle(20, 100);
+        evaluationBar.setFill(Color.GRAY);
+
+        // Game status
+        gameStatus = new Label("White to move");
+
+        getChildren().addAll(
+                new Label("Moves:"), moveHistoryArea,
+                capturedLabel, new Label("White Captures:"), capturedWhite,
+                new Label("Black Captures:"), capturedBlack,
+                evalLabel, evaluationBar,
+                new Label("Status:"), gameStatus
+        );
     }
 
-    public void updateGameStatus(String status) {
-        gameStatusLabel.setText("Game Status: " + status);
+    public void addMove(String move) {
+        moveHistoryArea.appendText(move + "\n");
     }
 
-    public void updateEvaluationBar(double evaluation) {
-        double height = (evaluation + 1) * 100; // normalize to 0-200 range
+    public void addCapturedPiece(String color, ImageView pieceIcon) {
+        pieceIcon.setFitWidth(20);
+        pieceIcon.setFitHeight(20);
+        if (color.equalsIgnoreCase("white")) {
+            capturedWhite.getChildren().add(pieceIcon);
+        } else {
+            capturedBlack.getChildren().add(pieceIcon);
+        }
+    }
+
+    public void updateEvaluation(double score) {
+        double height = 100 * (0.5 + Math.tanh(score / 3) / 2);
         evaluationBar.setHeight(height);
-        evaluationBar.setFill(evaluation > 0 ? Color.WHITE : Color.BLACK);
+        evaluationBar.setFill(score > 0 ? Color.WHITE : Color.BLACK);
+    }
+
+    public void setGameStatus(String status) {
+        gameStatus.setText(status);
     }
 }
