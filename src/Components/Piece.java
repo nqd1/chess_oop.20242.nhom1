@@ -23,7 +23,7 @@ public abstract class Piece {
     public String getImage() {
         String colorPrefix = (color == Color.BLACK) ? "B" : "W";
         String pieceName = this.getClass().getSimpleName();
-        return "../media/" + colorPrefix + pieceName + ".png";
+        return "media/" + colorPrefix + pieceName + ".png";
     }
     
     @Override
