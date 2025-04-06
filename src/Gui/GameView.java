@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 public class GameView extends Application {
     private BoardView boardView;
     private Pane pieceLayer;
+    private GameInfoView gameInfoView;
 
     private static final int TILE_SIZE = 80;
     private static final int BOARD_SIZE = 8;
@@ -20,9 +21,11 @@ public class GameView extends Application {
 
         boardView = new BoardView();
         pieceLayer = new Pane();
+        gameInfoView = new GameInfoView();
 
         StackPane gameBoard = new StackPane(boardView, pieceLayer);
         root.setCenter(gameBoard);
+        root.setRight(gameInfoView);
 
         HBox controlButtons = createControlButtons();
         root.setBottom(controlButtons);
@@ -30,7 +33,7 @@ public class GameView extends Application {
         MenuBar menuBar = createMenuBar();
         root.setTop(menuBar);
 
-        Scene scene = new Scene(root, BOARD_SIZE * TILE_SIZE, BOARD_SIZE * TILE_SIZE + 50);
+        Scene scene = new Scene(root, BOARD_SIZE * TILE_SIZE + 200, BOARD_SIZE * TILE_SIZE + 50);
         primaryStage.setTitle("Chess Game");
         primaryStage.setScene(scene);
         primaryStage.show();

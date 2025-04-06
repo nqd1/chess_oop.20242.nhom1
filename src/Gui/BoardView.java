@@ -13,8 +13,8 @@ public class BoardView extends GridPane {
     private static final int BOARD_SIZE = 8;
     private static final int TILE_SIZE = 80;
 
-    private Pane highlightLayer;
-    private List<Circle> moveHints = new ArrayList<>();
+    private static Pane highlightLayer;
+    private static List<Circle> moveHints = new ArrayList<>();
 
     public BoardView() {
         Image boardImage = new Image(getClass().getResource("/media/ChessBoard.png").toExternalForm());
@@ -29,7 +29,7 @@ public class BoardView extends GridPane {
     }
 
  
-    public void showLegalMoves(List<int[]> legalMoves) {
+    public static void showLegalMoves(List<int[]> legalMoves) {
         clearHighlights();
 
         for (int[] move : legalMoves) {
@@ -47,8 +47,15 @@ public class BoardView extends GridPane {
         highlightLayer.getChildren().addAll(moveHints);
     }
 
-    public void clearHighlights() {
+    public static void clearHighlights() {
         highlightLayer.getChildren().clear();
         moveHints.clear();
+    }
+    public void initializeGameLogic(){
+        GameController controller = new GameController(this);
+        setOnMouseClicked(event -> {
+            int col = (int) (event.getX() / TILE_SIZE);
+            int row = (int) (event.getY() / TILE_SIZE);
+        });
     }
 }
