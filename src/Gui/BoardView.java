@@ -9,7 +9,7 @@ import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardView extends StackPane {
+public class BoardView extends GridPane {
     private static final int BOARD_SIZE = 8;
     private static final int TILE_SIZE = 80;
 
