@@ -1,4 +1,6 @@
 package Components;
+import Gui.*;
+
 import java.util.*;
 
 
@@ -14,9 +16,12 @@ public abstract class Piece {
     public Color getColor() {
         return color;
     }
-    public abstract List<Move> getValidMoves(Board board);
+    public abstract List<Move> getValidMoves(/*Board board*/ int row, int col, Square[][] squares);
     public void setPosition(int row, int col) {
         this.row = row;
         this.col = col;
+    }
+    public boolean isValidPosition(int row, int col) {
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 }

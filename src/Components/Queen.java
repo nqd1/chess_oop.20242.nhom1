@@ -1,13 +1,15 @@
 package Components;
+import Gui.Square;
+
 import java.util.*;
 
-class Queen extends Piece {
+public class Queen extends Piece {
     private final static int value = 9;
     
     public Queen(Color color, int row, int col) {
             super(color, row, col, value);
     }
-    public List<Move> getValidMoves(Board board) {
+    public List<Move> getValidMoves(int row, int col, Square[][] squares) {
         List<Move> moves = new ArrayList<>();
         int[] dr = {-1, -1, -1, 0, 0, 1, 1, 1};
         int[] dc = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -16,11 +18,11 @@ class Queen extends Piece {
             while (true) {
                 nr += dr[i];
                 nc += dc[i];
-                if (!board.isValidPosition(nr, nc)) break;
-                if (board.getPiece(nr, nc) == null) {
+                if (!isValidPosition(nr, nc)) break;
+                if (squares[nr][nc].getPiece() == null) {
                     moves.add(new Move(row, col, nr, nc));
                 } else {
-                    if (board.getPiece(nr, nc).getColor() != color)
+                    if (squares[nr][nc].getPiece().getPiece().color != color)
                         moves.add(new Move(row, col, nr, nc));
                     break;
                 }

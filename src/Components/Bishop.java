@@ -1,12 +1,13 @@
 package Components;
 import java.util.*;
+import Gui.Square;
 
-class Bishop extends Piece {
+public class Bishop extends Piece {
     private final static int value = 3;
         public Bishop(Color color, int row, int col) {
             super(color, row, col, value);
     }
-    public List<Move> getValidMoves(Board board) {
+    public List<Move> getValidMoves(/*Board board*/int row, int col, Square[][] squares) {
         List<Move> moves = new ArrayList<>();
         int[] dr = {-1, -1, 1, 1};
         int[] dc = {-1, 1, -1, 1};
@@ -15,11 +16,13 @@ class Bishop extends Piece {
             while (true) {
                 nr += dr[i];
                 nc += dc[i];
-                if (!board.isValidPosition(nr, nc)) break;
-                if (board.getPiece(nr, nc) == null) {
+                if (!isValidPosition(nr, nc)) break;
+//                if (board.getPiece(nr, nc) == null) {
+                if(squares[nr][nc].getPiece() == null){
                     moves.add(new Move(row, col, nr, nc));
                 } else {
-                    if (board.getPiece(nr, nc).getColor() != color)
+//                    if (board.getPiece(nr, nc).getColor() != color)
+                        if(squares[nr][nc].getPiece().getPiece().color != color)
                         moves.add(new Move(row, col, nr, nc));
                     break;
                 }
