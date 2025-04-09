@@ -208,44 +208,45 @@ public class ChessBoard extends JPanel {
     }
 
     private ImageIcon loadPieceImage(String imagePath) {
-        if (imagePath == null || imagePath.isEmpty()) {
-            return null;
+        String cacheKey = imagePath + "_outlined";
+        if (pieceImages.containsKey(cacheKey)) {
+            return pieceImages.get(cacheKey);
         }
-        
-        if (pieceImages.containsKey(imagePath)) {
-            return pieceImages.get(imagePath);
-        }
-        
+
         try {
-            File imageFile = new File(imagePath);
-            if (!imageFile.exists()) {
-                System.err.println("Image file not found: " + imagePath);
-                return null;
+            BufferedImage originalImg = ImageIO.read(new File(imagePath));
+            if (originalImg != null) {
+                int pieceSize = SQUARE_SIZE - PIECE_PADDING;
+
+                int imageWidth = pieceSize;
+                int imageHeight = pieceSize;
+
+                BufferedImage outlinedImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = outlinedImage.createGraphics();
+
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+                g2d.setStroke(new BasicStroke(OUTLINE_THICKNESS));
+                g2d.setColor(OUTLINE_COLOR);
+
+                g2d.drawImage(originalImg, 0, 0, imageWidth, imageHeight, null);
+
+                g2d.setColor(OUTLINE_COLOR);
+                g2d.setStroke(new BasicStroke(OUTLINE_THICKNESS));
+                g2d.drawRect(0, 0, imageWidth - OUTLINE_THICKNESS, imageHeight - OUTLINE_THICKNESS);
+
+                g2d.dispose();
+
+                ImageIcon icon = new ImageIcon(outlinedImage);
+                pieceImages.put(cacheKey, icon);
+                return icon;
             }
-            
-            BufferedImage img = ImageIO.read(imageFile);
-            if (img == null) {
-                System.err.println("Failed to read image: " + imagePath);
-                return null;
-            }
-            
-            int width = SQUARE_SIZE - 2 * PIECE_PADDING;
-            int height = SQUARE_SIZE - 2 * PIECE_PADDING;
-            
-            BufferedImage resizedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = resizedImg.createGraphics();
-            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g2d.drawImage(img, 0, 0, width, height, null);
-            g2d.dispose();
-            
-            ImageIcon icon = new ImageIcon(resizedImg);
-            pieceImages.put(imagePath, icon);
-            
-            return icon;
         } catch (IOException e) {
-            System.err.println("Error loading image: " + e.getMessage());
-            return null;
+            System.err.println("Error loading or processing image: " + imagePath + " - " + e.getMessage());
+            e.printStackTrace();
         }
+        return null;
     }
 
     private void updateSquare(int row, int col) {
@@ -460,12 +461,13 @@ public class ChessBoard extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        int size = SQUARE_SIZE * BOARD_SIZE;
-        return new Dimension(size, size);
+        return new Dimension(BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE);
     }
     
     public void updateSquareSize(int containerSize) {
-        SQUARE_SIZE = containerSize / BOARD_SIZE;
+        int newSquareSize = containerSize / BOARD_SIZE;
+        
+        SQUARE_SIZE = newSquareSize;
         
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
@@ -474,9 +476,12 @@ public class ChessBoard extends JPanel {
         }
         
         pieceImages.clear();
+        
         dotIcon = createDotIcon();
         
         resetBoardVisuals();
+        revalidate();
+        repaint();
     }
 
     private boolean isValidPosition(int row, int col) {
@@ -488,12 +493,11 @@ public class ChessBoard extends JPanel {
         super.paintComponent(g);
         
         if (isDragging && draggedPieceIcon != null) {
-            Point mousePosition = getMousePosition();
-            if (mousePosition != null) {
-                int draggedPieceWidth = draggedPieceIcon.getIconWidth();
-                int draggedPieceHeight = draggedPieceIcon.getIconHeight();
-                
-                draggedPieceIcon.paintIcon(this, g, mousePosition.x - draggedPieceWidth / 2, mousePosition.y - draggedPieceHeight / 2);
+            Point mousePos = getMousePosition();
+            if (mousePos != null) {
+                int x = mousePos.x - draggedPieceIcon.getIconWidth() / 2;
+                int y = mousePos.y - draggedPieceIcon.getIconHeight() / 2;
+                draggedPieceIcon.paintIcon(this, g, x, y);
             }
         }
     }
@@ -522,24 +526,27 @@ public class ChessBoard extends JPanel {
     
     private void updateFEN() {
         if (FENTextArea != null) {
-            String fenString = FEN.generateFEN(gameBoard, currentPlayerTurn, moveCounter);
-            FENTextArea.setText(fenString);
+            String fen = FEN.generateFEN(gameBoard, currentPlayerTurn, moveCounter);
+            
+            FENTextArea.setText("FEN:\n" + fen);
         }
     }
     
     private void executeMove(Move move) {
-        Piece movingPiece = gameBoard.getPiece(move.fromRow, move.fromCol);
+        Piece pieceToMove = gameBoard.getPiece(move.fromRow, move.fromCol);
         
-        String moveNotation = getMoveNotation(move, movingPiece);
-        gameBoard.movePiece(move);
-        
-        currentPlayerTurn = (currentPlayerTurn == Components.Color.WHITE) ?
-                           Components.Color.BLACK : Components.Color.WHITE;
-        
-        recordMove(moveNotation);
-        moveHistory.setCaretPosition(moveHistory.getDocument().getLength());
-        
-        updateEvaluation();
-        updateFEN();
+        if (pieceToMove != null) {
+            gameBoard.movePiece(move);
+            
+            String moveNotation = getMoveNotation(move, pieceToMove);
+            recordMove(moveNotation);
+            
+            currentPlayerTurn = (currentPlayerTurn == Components.Color.WHITE) ? 
+                Components.Color.BLACK : Components.Color.WHITE;
+                
+            updateEvaluation();
+            
+            updateFEN();
+        }
     }
 }

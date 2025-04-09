@@ -7,8 +7,9 @@ public class test_game {
         Game game = new Game();
         Board board = game.getBoard();
         System.out.println(board);
-        String fen = Utils.FEN.gameToFen(game);
-        System.out.println(fen);
+        //String fen = Utils.FEN.gameToFen(game); 
+        //System.out.println(fen);
+        // do vừa sửa lại FEN 
         System.out.println((game.getCurrentPlayer()==Color.WHITE)? "white" : "black");
         System.out.println(board.getPiece(0, 1));
         System.out.println(board.getPiece(2, 2));
@@ -30,8 +31,8 @@ public class test_game {
         }
 
         System.out.println(board);
-        String fen2 = Utils.FEN.gameToFen(game);
-        System.out.println(fen2);
+        //String fen2 = Utils.FEN.gameToFen(game);
+        //System.out.println(fen2);
         
     }
 }
