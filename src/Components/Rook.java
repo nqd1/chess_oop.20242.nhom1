@@ -4,10 +4,26 @@ import java.util.*;
 
 public class Rook extends Piece {
     private final static int value = 5;
+    private boolean hasMoved = false;
 
     public Rook(Color color, int row, int col) {
-            super(color, row, col, value);
+        super(color, row, col, value);
     }
+    
+    @Override
+    public void setPosition(int row, int col) {
+        super.setPosition(row, col);
+        hasMoved = true;
+    }
+    
+    public boolean getHasMoved() {
+        return hasMoved;
+    }
+    
+    public void setHasMoved(boolean moved) {
+        this.hasMoved = moved;
+    }
+    
     public List<Move> getValidMoves(Board board) {
         List<Move> moves = new ArrayList<>();
         int[] dr = {-1, 0, 0, 1};
